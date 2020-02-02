@@ -66,7 +66,10 @@
 					</div>
 					
 					<v-row align="center">
-						<v-col class="d-flex align-center justify-space-between">
+						<v-col
+							class="d-flex align-center justify-space-between"
+							cols="8"
+						>
 							<div>
 								<v-progress-circular
 									:value="media.votes* 10"
@@ -80,7 +83,7 @@
 							</div>
 							
 							<div class="d-flex justify-space-between align-center">
-								<v-chip class="mr-12">
+								<v-chip class="mr-8">
 									<v-avatar left>
 										<v-icon>mdi-av-timer</v-icon>
 									</v-avatar>
@@ -98,14 +101,7 @@
 								</div>
 							</div>
 							
-							<v-chip
-								color="success"
-								label
-							>
-								<v-avatar left>
-									<v-icon>mdi-checkbox-marked-circle</v-icon>
-								</v-avatar>
-								
+							<v-chip>
 								{{ media.status }}
 							</v-chip>
 						</v-col>
