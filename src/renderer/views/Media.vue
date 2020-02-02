@@ -1,6 +1,6 @@
 <template>
 	<v-row v-if="media">
-		<v-container>
+		<v-container fluid>
 			<v-row>
 				<v-col
 					cols="3"
