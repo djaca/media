@@ -7,7 +7,7 @@
 				>
 					<v-img
 						:src="getMainImg(media.img)"
-						height="400px"
+						width="100%"
 					/>
 					
 					<v-btn
