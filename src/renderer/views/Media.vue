@@ -1,10 +1,9 @@
 <template>
-	<v-row v-if="media">
+	<div v-if="media">
 		<v-container fluid>
 			<v-row>
 				<v-col
-					cols="3"
-					lg="2"
+					cols="2"
 				>
 					<v-img
 						:src="getMainImg(media.img)"
@@ -53,7 +52,7 @@
 				
 				<v-col
 					cols="9"
-					lg="10"
+					offset="1"
 				>
 					<div class="mb-3">
 						<span
@@ -132,20 +131,18 @@
 						<v-col class="d-flex">
 							<v-card
 								v-for="(actor, i) in media.cast.slice(0, 5)"
-								max-width="120px"
+								max-width="100px"
 								height="100%"
 								class="mr-4"
 								:key="i"
 							>
 								<v-img :src="getCastImg(actor.profile_path)"/>
 								
-								<v-card-title class="caption">
-									{{ actor.name }}
-								</v-card-title>
+								<div class="caption pa-2">
+									<div>{{ actor.name }}</div>
 								
-								<v-card-subtitle class="caption">
-									{{ actor.character }}
-								</v-card-subtitle>
+									<div class="grey--text">{{ actor.character }}</div>
+								</div>
 							</v-card>
 						</v-col>
 					</v-row>
@@ -185,7 +182,7 @@
 			:items="torrents"
 			v-if="isMovie"
 		/>
-	</v-row>
+	</div>
 </template>
 
 <script>

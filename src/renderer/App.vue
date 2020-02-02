@@ -43,11 +43,9 @@
 			</v-app-bar>
 			
 			<v-content class="mb-12">
-				<v-container fluid>
 					<loader v-if="loading"/>
 
 					<router-view/>
-				</v-container>
 			</v-content>
 			
 			<torrent-downloader />
