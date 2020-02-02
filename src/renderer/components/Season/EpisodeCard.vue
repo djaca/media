@@ -37,16 +37,15 @@
 					Episode {{ item.episode_number }}
 				</v-chip>
 				
-				<v-chip small>
-					<v-avatar left>
-						<v-icon size="18">mdi-calendar</v-icon>
-					</v-avatar>
-					
+				<v-chip
+					class="caption"
+					small
+				>
 					{{ item.air_date }}
 				</v-chip>
 			</div>
 			
-			<div class="mt-6">
+			<div class="my-9 caption">
 				{{ item.overview }}
 			</div>
 		</v-card-text>
