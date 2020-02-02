@@ -77,13 +77,6 @@
 								>
 									{{ media.votes * 10 }} %
 								</v-progress-circular>
-								
-								<span
-									style="line-height: 1rem"
-									class="ml-2"
-								>
-									User score
-								</span>
 							</div>
 							
 							<div class="d-flex justify-space-between align-center">
