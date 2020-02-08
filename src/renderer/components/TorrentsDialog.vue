@@ -212,9 +212,15 @@
             let torrents = this.torrents.popcorn[this.item.episode_number]
   
             if (torrents) {
+              torrents = torrents.torrents
+  
               this.panel = [0]
   
-              this.torrentProviders.popcorn = torrents.torrents
+              if (torrents.hasOwnProperty(0)) {
+                delete torrents[0]
+              }
+  
+              this.torrentProviders.popcorn = torrents
   
               return
             }
@@ -258,7 +264,7 @@
   
       torrentExists (url) {
         let torrent = this.$store.getters['Torrents/torrent'](this.item.id)
-
+  
         if (torrent) {
           return torrent.magnet === url
         }
