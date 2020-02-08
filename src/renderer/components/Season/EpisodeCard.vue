@@ -70,7 +70,7 @@
 			
 			<v-btn
 				v-if="hasTorrent"
-				@click="open"
+				@click="playTVShow"
 				icon
 			>
 				<v-icon>
@@ -137,10 +137,12 @@
         this.toggleWatchUnwatch(this.item.episode_number)
       },
   
-      open () {
-        if (this.hasSubtitle) {
-          console.log(this.torrent.path, this.subtitle.path)
+      playTVShow () {
+        if (this.subtitle) {
+          this.$electron.shell.openItem(this.subtitle.path)
         }
+  
+        this.$electron.shell.openItem(this.torrent.path)
       }
     }
   }

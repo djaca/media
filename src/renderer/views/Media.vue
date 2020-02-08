@@ -42,6 +42,7 @@
 					
 					<v-btn
 						v-if="isMovie && hasTorrent"
+						@click="playMovie"
 						class="mt-5"
 						block
 						dark
@@ -129,7 +130,7 @@
 								
 								<div class="caption pa-2">
 									<div>{{ actor.name }}</div>
-								
+									
 									<div class="grey--text">{{ actor.character }}</div>
 								</div>
 							</v-card>
@@ -215,8 +216,16 @@
         return !!this.torrents
       },
   
+      torrent () {
+        return this.$store.getters['Torrents/torrent'](this.media.id)
+      },
+  
+      subtitle () {
+        return this.$store.getters['Subtitles/subtitle'](this.media.id)
+      },
+  
       hasTorrent () {
-        return !!this.$store.state.Torrents.items.find(t => t.id === this.media.id)
+        return !!this.torrent
       }
     },
   
@@ -240,6 +249,14 @@
   
       openTorrentsDialog () {
         this.torrentsDialog = true
+      },
+  
+      playMovie () {
+        if (this.subtitle) {
+          this.$electron.shell.openItem(this.subtitle.path)
+        }
+
+        this.$electron.shell.openItem(this.current.path)
       }
     },
   

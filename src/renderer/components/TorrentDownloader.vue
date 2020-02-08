@@ -50,7 +50,7 @@
 								
 								<v-list-item-icon>
 									<v-btn
-										@click="open"
+										@click="play"
 										x-large
 										icon
 									>
@@ -225,13 +225,12 @@
         this.$store.commit('Torrents/SET_CURRENT', null)
       },
   
-      open () {
+      play () {
         if (this.subtitle) {
-          // this.open(this.subtitle.path)
-          console.log(this.subtitle.path, this.current.path)
+          this.$electron.shell.openItem(this.subtitle.path)
         }
   
-        // this.open(this.current.path)
+        this.$electron.shell.openItem(this.current.path)
       }
     },
   
