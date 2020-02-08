@@ -168,7 +168,7 @@
 		<torrents-dialog
 			@show="val => torrentsDialog = val"
 			:show="torrentsDialog"
-			:items="torrents"
+			:item="media"
 			v-if="isMovie"
 		/>
 	</div>

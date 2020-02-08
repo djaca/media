@@ -70,6 +70,7 @@
 			
 			<v-btn
 				v-if="hasTorrent"
+				@click="open"
 				icon
 			>
 				<v-icon>
@@ -110,11 +111,20 @@
         return 'https://fakeimg.pl/293x160/424242/?retina=1&text=no image'
       },
   
+      torrent () {
+        return this.$store.getters['Torrents/torrent'](this.item.id)
+      },
+  
       hasTorrent () {
-        return !!this.$store.getters['Torrents/torrentsSeason'].find(t => t.episode === this.item.episode_number)
-        // return !!this.$store.state.Torrents.items.find(
-        //   t => t.id === this.$route.params.id && t.season === this.$route.params.season && t.episode === this.item.episode_number
-        // )
+        return !!this.torrent
+      },
+  
+      subtitle () {
+        return this.$store.getters['Subtitles/subtitle'](this.item.id)
+      },
+  
+      hasSubtitle () {
+        return !!this.subtitle
       }
     },
   
@@ -125,6 +135,12 @@
   
       toggleWatch () {
         this.toggleWatchUnwatch(this.item.episode_number)
+      },
+  
+      open () {
+        if (this.hasSubtitle) {
+          console.log(this.torrent.path, this.subtitle.path)
+        }
       }
     }
   }

@@ -6,7 +6,7 @@
 			cols="2"
 		>
 			<episode-card
-				@show-torrents-dialog="openTorrentsDialog(episode.episode_number)"
+				@show-torrents-dialog="openTorrentsDialog(episode)"
 				:item="episode"
 			/>
 		</v-col>
@@ -14,7 +14,7 @@
 		<torrents-dialog
 			@show="val => torrentsDialog = val"
 			:show="torrentsDialog"
-			:episode="episode"
+			:item="item"
 		/>
 	</v-row>
 </template>
@@ -32,7 +32,7 @@
     data () {
       return {
         torrentsDialog: false,
-        episode: null
+        item: null
       }
     },
   
@@ -51,7 +51,7 @@
       }),
   
       openTorrentsDialog (episode) {
-        this.episode = episode
+        this.item = episode
   
         this.torrentsDialog = true
       }

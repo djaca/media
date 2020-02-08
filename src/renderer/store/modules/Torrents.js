@@ -4,7 +4,7 @@ const state = {
 }
 
 const getters = {
-  torrentsSeason: (state, getters, rootState) => state.items.filter(i => i.season === rootState.route.params.season)
+  torrent: state => id => state.items.find(i => i.id === id)
 }
 
 const mutations = {
@@ -36,21 +36,8 @@ const mutations = {
 }
 
 const actions = {
-  download ({commit, rootState}, {magnet, episode}) {
-    const current = rootState.Media.current
-
-    let data = {
-      id: current.id,
-      magnet
-    }
-
-    if (episode) {
-      data.season = rootState.route.params.season
-
-      data.episode = episode
-    }
-
-    commit('SET_CURRENT', data)
+  download ({commit, rootState}, {id, magnet}) {
+    commit('SET_CURRENT', { id, magnet })
   }
 }
 

@@ -6,7 +6,7 @@
 		hide-overlay
 		fullscreen
 	>
-		<v-card v-if="this.items">
+		<v-card v-if="torrentProviders">
 			<v-toolbar dark>
 				<v-btn
 					@click="$emit('show', false)"
@@ -17,7 +17,8 @@
 				</v-btn>
 				
 				<v-toolbar-title>
-					{{ mediaTitle }} <span class="body-2" v-if="currentMedia === 'tv'">{{ season }} / {{ episode }}</span>
+					{{ mediaTitle }}
+					<span class="body-2" v-if="currentMedia === 'tv'">{{ season }} / {{ item.episode_number }}</span>
 				</v-toolbar-title>
 			</v-toolbar>
 			<v-tabs
@@ -38,13 +39,13 @@
 					<v-card-text>
 						<v-expansion-panels v-model="panel" multiple>
 							<v-expansion-panel
-								:readonly="!!items.popcorn"
-								:disabled="!items.popcorn"
+								:readonly="!!torrentProviders.popcorn"
+								:disabled="!torrentProviders.popcorn"
 							>
 								<v-expansion-panel-header>Popcorn Time</v-expansion-panel-header>
 								<v-expansion-panel-content>
 									<v-chip
-										v-for="(item, i) in items.popcorn"
+										v-for="(item, i) in torrentProviders.popcorn"
 										@click="downloadTorrent(item.url)"
 										class="mr-4"
 										:key="i"
@@ -66,11 +67,11 @@
 								</v-expansion-panel-content>
 							</v-expansion-panel>
 							
-							<v-expansion-panel :disabled="fetchingTPB || !items.tpb">
+							<v-expansion-panel :disabled="fetchingTPB || !torrentProviders.tpb">
 								<v-expansion-panel-header>The Pirate Bay</v-expansion-panel-header>
 								<v-expansion-panel-content>
 									<v-chip
-										v-for="(item, i) in items.tpb"
+										v-for="(item, i) in torrentProviders.tpb"
 										@click="downloadTorrent(item.url)"
 										class="mr-4"
 										:key="i"
@@ -95,14 +96,53 @@
 					</v-card-text>
 				</v-tab-item>
 				
-				<v-tab-item
-					value="tab-2"
-				>
+				<v-tab-item value="tab-2">
 					<v-card
 						flat
 						tile
 					>
-						<v-card-text>Subtitles</v-card-text>
+						<v-card-text>
+							<v-simple-table>
+								<template v-slot:default>
+									<thead>
+									<tr>
+										<th class="text-left">Name</th>
+										<th class="text-left"></th>
+										<th class="text-left">Lang</th>
+										<th class="text-left">Author</th>
+										<th class="text-left">Count</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr v-for="subtitle in subtitles" :key="subtitle.id">
+										<td>{{ subtitle.versions }}</td>
+										<td>
+											<v-btn
+												@click="downloadSubtitle(item.id, subtitle.id)"
+												v-if="!subtitleExists(subtitle.id)"
+												text
+												icon
+											>
+												<v-icon>mdi-download-outline</v-icon>
+											</v-btn>
+											
+											<v-btn
+												@click="openSubtitle()"
+												v-else
+												text
+												icon
+											>
+												<v-icon>mdi-open-in-new</v-icon>
+											</v-btn>
+										</td>
+										<td>{{ subtitle.language }}</td>
+										<td>{{ subtitle.author }}</td>
+										<td>{{ subtitle.downloads }}</td>
+									</tr>
+									</tbody>
+								</template>
+							</v-simple-table>
+						</v-card-text>
 					</v-card>
 				</v-tab-item>
 			</v-tabs>
@@ -116,13 +156,13 @@
   export default {
     name: 'TorrentsDialog',
   
-    props: ['show', 'episode'],
+    props: ['show', 'item'],
   
     data () {
       return {
         tab: null,
         panel: [],
-        items: null,
+        torrentProviders: null,
         fetchingTPB: true
       }
     },
@@ -136,13 +176,26 @@
       }),
   
       ...mapGetters({
-        torrents: 'Media/torrents'
-      })
+        torrents: 'Media/torrents',
+        cc: 'Media/subtitles'
+      }),
+  
+      subtitles () {
+        if (this.currentMedia === 'tv') {
+          return this.cc(this.item.episode_number)
+        }
+  
+        return this.cc()
+      },
+  
+      subtitle () {
+        return this.$store.getters['Subtitles/subtitle'](this.item.id)
+      }
     },
   
     methods: {
       ...mapActions({
-        download: 'Torrents/download'
+        searchTorrents: 'Media/searchTorrents'
       }),
   
       getTorrents () {
@@ -154,55 +207,65 @@
       setPopcornTorrents () {
         if (this.torrents.popcorn) {
           if (this.currentMedia === 'tv') {
-            let torrents = this.torrents.popcorn[this.episode]
+            let torrents = this.torrents.popcorn[this.item.episode_number]
   
             if (torrents) {
               this.panel = [0]
   
-              this.items.popcorn = torrents.torrents
+              this.torrentProviders.popcorn = torrents.torrents
   
               return
             }
   
-            this.items.popcorn = null
+            this.torrentProviders.popcorn = null
   
             return
           }
   
           this.panel = [0]
   
-          this.items.popcorn = this.torrents.popcorn
+          this.torrentProviders.popcorn = this.torrents.popcorn
         }
       },
   
-      setTPBTorrents () {
+      async setTPBTorrents () {
         let query = this.currentMedia === 'tv'
-          ? `${this.mediaTitle} S${this.season <= 9 ? `0${this.season}` : this.season}E${this.episode <= 9 ? `0${this.episode}` : this.episode}`
+          ? `${this.mediaTitle} S${this.season <= 9 ? `0${this.season}` : this.season}E${this.item.episode_number <= 9 ? `0${this.item.episode_number}` : this.item.episode_number}`
           : `${this.mediaTitle}`
   
-        this.$store.dispatch('Media/searchTorrents', query)
-          .then(data => {
-            if (data.length > 0) {
-              this.items.tpb = data.filter(item => item.meta.resolution || item.meta.quality || item.meta.group)
-            }
+        try {
+          let items = await this.searchTorrents(query)
   
-            this.fetchingTPB = false
-          })
-          .catch(() => (this.fetchingTPB = false))
+          if (items.length > 0) {
+            this.torrentProviders.tpb = items.filter(item => item.meta.resolution || item.meta.quality || item.meta.group)
+          }
+        } catch (err) {
+          console.log(err)
+        }
+  
+        this.fetchingTPB = false
       },
   
       downloadTorrent (magnet) {
         this.$emit('show', false)
   
         this.$nextTick(() => {
-          if (this.currentMedia === 'tv') {
-            this.download({magnet, episode: this.episode})
-  
-            return
-          }
-  
-          this.download({magnet})
+          this.$store.dispatch('Torrents/download', { id: this.item.id, magnet })
         })
+      },
+  
+      downloadSubtitle (id, urlId) {
+        this.$store.dispatch('Subtitles/download', { id, urlId })
+      },
+  
+      subtitleExists (id) {
+        if (this.subtitle) {
+          return this.subtitle.urlId === id
+        }
+      },
+  
+      openSubtitle () {
+        this.$electron.shell.openItem(this.subtitle.path)
       }
     },
   
@@ -211,7 +274,7 @@
         if (val) {
           this.panel = []
   
-          this.items = {
+          this.torrentProviders = {
             popcorn: null,
             tpb: null
           }

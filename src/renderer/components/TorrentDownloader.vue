@@ -34,8 +34,8 @@
 									<v-list-item-title v-text="title"/>
 									
 									<v-list-item-subtitle
-										v-text="subtitle"
-										v-if="subtitle"
+										v-text="subtitleText"
+										v-if="subtitleText"
 									/>
 								</v-list-item-content>
 								
@@ -73,7 +73,7 @@
 </template>
 
 <script>
-  import { mapMutations, mapState } from 'vuex'
+  import { mapState, mapMutations } from 'vuex'
   import torrentStream from 'torrent-stream'
   import prettyBytes from 'pretty-bytes'
   
@@ -112,7 +112,7 @@
         return true
       },
   
-      subtitle () {
+      subtitleText () {
         if (!this.isMovie) {
           return `S${this.current.season <= 9 ? `0${this.current.season}` : this.current.season}E${this.current.episode <= 9 ? `0${this.current.episode}` : this.current.episode}`
         }
@@ -142,6 +142,10 @@
         }
   
         return 0
+      },
+  
+      subtitle () {
+        return this.$store.getters['Subtitles/subtitle'](this.current.id)
       }
     },
   
@@ -222,7 +226,12 @@
       },
   
       open () {
-        require('electron').ipcRenderer.send('open', this.current.path)
+        if (this.subtitle) {
+          // this.open(this.subtitle.path)
+          console.log(this.subtitle.path, this.current.path)
+        }
+  
+        // this.open(this.current.path)
       }
     },
   

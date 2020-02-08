@@ -1,7 +1,8 @@
 import { getMediaItems, getSingleMedia, getSeason } from '@/api/TMDb'
-import { getTorrentsFor } from '../../api/tvApi'
-import { searchTorrents } from '../../api/thePirateBay'
-import router from '../../router'
+import { getTorrentsFor } from '@/api/tvApi'
+import { searchTorrents } from '@/api/thePirateBay'
+import { searchTitlovi } from '@/api/titlovi'
+import router from '@/router'
 
 const state = {
   items: [],
@@ -11,7 +12,8 @@ const state = {
   torrents: {
     popcorn: null,
     tpb: null
-  }
+  },
+  subtitles: null
 }
 
 const getters = {
@@ -24,6 +26,14 @@ const getters = {
     }
 
     return state.torrents
+  },
+
+  subtitles: (state, getters, rootState) => (episode = null) => {
+    if (rootState.App.currentMedia === 'tv') {
+      return state.subtitles.filter(s => s.episode === episode)
+    }
+
+    return state.subtitles
   }
 }
 
@@ -67,6 +77,10 @@ const mutations = {
       popcorn: null,
       tpb: null
     }
+  },
+
+  SET_SUBTITLES (state, payload) {
+    state.subtitles = payload
   }
 }
 
@@ -119,12 +133,18 @@ const actions = {
 
       commit('SET_TORRENTS', null)
 
+      commit('SET_SUBTITLES', null)
+
       try {
         const current = await getSingleMedia(rootState.route.meta.type, rootState.route.params.id)
 
         commit('SET_CURRENT', current)
 
         dispatch('getTorrents', current.imdbId)
+
+        if (rootState.route.meta.type === 'movie') {
+          dispatch('getSubtitles')
+        }
 
         commit('App/SET_MEDIA', rootState.route.meta.type, { root: true })
 
@@ -143,7 +163,7 @@ const actions = {
     })
   },
 
-  getSeason ({ state, commit, rootState }) {
+  getSeason ({ state, commit, dispatch, rootState }) {
     return new Promise(async resolve => {
       commit('Loader/toggle', null, { root: true })
 
@@ -159,8 +179,12 @@ const actions = {
 
       commit('SET_SEASON', null)
 
+      commit('SET_SUBTITLES', null)
+
       try {
         commit('SET_SEASON', await getSeason(rootState.route.params.id, rootState.route.params.season))
+
+        dispatch('getSubtitles')
 
         commit('App/SET_TITLE', setTitle(state.current.title, `Season ${state.season.season_number}`), { root: true })
 
@@ -220,6 +244,16 @@ const actions = {
           reject(err)
         })
     })
+  },
+
+  async getSubtitles ({ commit, state, rootState }) {
+    try {
+      const data = await searchTitlovi({ imdbId: state.current.imdbId, season: rootState.route.params.season })
+
+      commit('SET_SUBTITLES', data)
+    } catch (err) {
+      console.log(err)
+    }
   }
 }
 
