@@ -46,6 +46,7 @@
 								<v-expansion-panel-content>
 									<v-chip
 										v-for="(item, i) in torrentProviders.popcorn"
+										:disabled="torrentExists(item.url)"
 										@click="downloadTorrent(item.url)"
 										class="mr-4"
 										:key="i"
@@ -72,6 +73,7 @@
 								<v-expansion-panel-content>
 									<v-chip
 										v-for="(item, i) in torrentProviders.tpb"
+										:disabled="torrentExists(item.url)"
 										@click="downloadTorrent(item.url)"
 										class="mr-4"
 										:key="i"
@@ -252,6 +254,14 @@
         this.$nextTick(() => {
           this.$store.dispatch('Torrents/download', { id: this.item.id, magnet })
         })
+      },
+  
+      torrentExists (url) {
+        let torrent = this.$store.getters['Torrents/torrent'](this.item.id)
+
+        if (torrent) {
+          return torrent.magnet === url
+        }
       },
   
       downloadSubtitle (id, urlId) {
