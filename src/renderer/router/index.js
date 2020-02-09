@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '@/store'
 
 Vue.use(VueRouter)
 
@@ -12,7 +13,7 @@ const routes = [
   {
     path: '/movies',
     name: 'movies',
-    component: require('@/views/Movies').default,
+    component: require('@/views/Library').default,
     meta: {
       type: 'movie',
       title: 'Movies'
@@ -30,7 +31,7 @@ const routes = [
   {
     path: '/tv-shows',
     name: 'tv-shows',
-    component: require('@/views/TVShows').default,
+    component: require('@/views/Library').default,
     meta: {
       type: 'tv',
       title: 'TV'
@@ -66,6 +67,12 @@ const router = new VueRouter({
   scrollBehavior () {
     return { x: 0, y: 0 }
   }
+})
+
+router.beforeEach((to, from, next) => {
+  store.commit('App/SET_MEDIA', to.meta.type)
+
+  next()
 })
 
 export default router

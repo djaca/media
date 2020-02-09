@@ -1,33 +1,33 @@
 <template>
 	<div>
-		<cards-row :items="shows"/>
+		<cards-row :items="items"/>
 		
 		<v-row justify="center">
 			<v-col cols="3">
 				<v-btn
+					v-text="'Load more'"
 					@click="fetch"
 					block
 					large
-				>
-					Load more
-				</v-btn>
+				/>
 			</v-col>
 		</v-row>
 	</div>
 </template>
 
 <script>
-  import CardsRow from '../components/CardsRow'
+  import CardsRow from '@/components/CardsRow'
   import { mapState, mapActions } from 'vuex'
   
   export default {
-    name: 'TVShows',
+    name: 'Library',
   
     components: { CardsRow },
   
     computed: {
       ...mapState({
-        shows: state => state.Media.items
+        items: state => state.Media.items,
+        currentMedia: state => state.App.currentMedia
       })
     },
   
@@ -38,11 +38,15 @@
       })
     },
   
-    beforeMount () {
-      if (this.$store.state.route.from.name === 'movies') {
-        this.$store.commit('App/RESET_TYPE')
+    watch: {
+      currentMedia (val, oldVal) {
+        if (val !== oldVal) {
+          this.get()
+        }
       }
+    },
   
+    beforeMount () {
       this.get()
     }
   }
