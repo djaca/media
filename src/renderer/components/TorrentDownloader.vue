@@ -219,9 +219,7 @@
         this.title = null
   
         this.img = null
-  
-        this.$store.commit('Torrents/REMOVE_ITEM', this.current)
-  
+
         this.$store.commit('Torrents/SET_CURRENT', null)
       },
   
