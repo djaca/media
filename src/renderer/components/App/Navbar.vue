@@ -4,13 +4,13 @@
 			@click.stop="toggleSidebar"
 		/>
 		
-		<!-- Make this as component -->
 		<v-btn
 			v-if="$route.name === 'season'"
 			@click="back"
+			class="mr-3"
 			icon
 		>
-			<v-icon>mdi-arrow-left-thick</v-icon>
+			<v-icon v-text="'mdi-arrow-left-thick'" />
 		</v-btn>
 		
 		<v-toolbar-title class="headline d-flex align-center">
