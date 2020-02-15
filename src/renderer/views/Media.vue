@@ -244,7 +244,11 @@
       },
   
       getCastImg (img) {
-        return `https://image.tmdb.org/t/p/w138_and_h175_face${img}`
+        if (img) {
+          return `https://image.tmdb.org/t/p/w138_and_h175_face${img}`
+        }
+  
+        return 'https://fakeimg.pl/100x126/303030/?retina=1&text=no image'
       },
   
       openTorrentsDialog () {
