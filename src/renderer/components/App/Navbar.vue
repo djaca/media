@@ -30,13 +30,17 @@
 		
 		<v-spacer/>
 		
-		<template v-if="$route.name === 'movies' || $route.name === 'tv-shows'">
+		<template v-if="$route.name === 'movies' || $route.name === 'tv-shows' || $route.name === 'home'">
 			<v-search/>
 			
 			<v-spacer/>
 			
-			<v-app-bar-nav-icon @click.stop="toggleTempSidebar"/>
 		</template>
+		
+		<v-app-bar-nav-icon
+			v-if="$route.name === 'movies' || $route.name === 'tv-shows'"
+			@click.stop="toggleTempSidebar"
+		/>
 	</v-app-bar>
 </template>
 
