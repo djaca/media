@@ -30,56 +30,43 @@
 		
 		<v-spacer/>
 		
-		<div class="mr-6" style="max-width: 250px;">
-			<v-text-field
-				prepend-inner-icon="mdi-magnify"
-				placeholder="Search..."
-				@keydown.enter="search"
-				v-model="query"
-				hide-details
-				single-line
-				clearable
-				rounded
-				dense
-				solo
-			/>
-		</div>
-		
 		<template v-if="$route.name === 'movies' || $route.name === 'tv-shows'">
+			<v-search/>
+			
+			<v-spacer/>
+			
 			<v-app-bar-nav-icon @click.stop="toggleTempSidebar"/>
 		</template>
 	</v-app-bar>
 </template>
 
 <script>
-	import { mapMutations } from 'vuex'
-	
-export default {
-  name: 'Navbar',
-
-  data () {
-    return {
-      right: false,
-      drawerRight: false,
-      query: ''
-    }
-  },
-
-  methods: {
-    ...mapMutations({
-      'toggleSidebar': 'App/TOGGLE_SIDEBAR',
-      'toggleTempSidebar': 'App/SET_TEMP_SIDEBAR'
-    }),
-
-    back () {
-      return this.$router.push({ name: 'tv', params: { id: this.$store.state.Media.current.id } })
+  import VSearch from '@/components/App/VSearch'
+  import { mapMutations } from 'vuex'
+  
+  export default {
+    name: 'Navbar',
+  
+    components: { VSearch },
+  
+    data () {
+      return {
+        right: false,
+        drawerRight: false
+      }
     },
-	
-    search () {
-      console.log(this.query)
+  
+    methods: {
+      ...mapMutations({
+        'toggleSidebar': 'App/TOGGLE_SIDEBAR',
+        'toggleTempSidebar': 'App/SET_TEMP_SIDEBAR'
+      }),
+  
+      back () {
+        return this.$router.push({ name: 'tv', params: { id: this.$store.state.Media.current.id } })
+      }
     }
   }
-}
 </script>
 
 <style scoped>

@@ -23,6 +23,28 @@ export const getMediaItems = (mediaType, type, page) => {
   })
 }
 
+export const search = query => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { data } = await axios.get(`search/multi?query=${query}&api_key=${key}&language=${lang}&page=1&include_adult=false`)
+
+      resolve(data.results.filter(item => item.media_type !== 'person').map(item => {
+        let releaseDate = item.release_date || item.first_air_date
+
+        return {
+          id: item.id,
+          title: item.name || item.title,
+          img: item.poster_path,
+          year: releaseDate ? releaseDate.substr(0, 4) : '',
+          type: item.media_type
+        }
+      }))
+    } catch (err) {
+      reject(err)
+    }
+  })
+}
+
 export const getSingleMedia = (mediaType, id) => {
   return axios.all([
     axios.get(`${mediaType}/${id}?api_key=${key}&language=${lang}`),
