@@ -4,7 +4,7 @@
 		:item-value="parseItemValue"
 		:search-input.sync="query"
 		@click:clear="clearItems"
-		placeholder="Search..."
+		placeholder="Search movie or tv show"
 		:loading="loading"
 		item-text="title"
 		v-model="select"
