@@ -17,7 +17,7 @@
 			<v-icon
 				v-if="$route.name !== 'home'"
 				large
-				light
+				color="grey darken-3"
 			>
 				{{ $store.getters['App/icon'] }}
 			</v-icon>
