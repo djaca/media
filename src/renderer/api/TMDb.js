@@ -11,10 +11,13 @@ export const getMediaItems = (mediaType, type, page) => {
       const { data } = await axios.get(`${mediaType}/${type}?api_key=${key}&language=${lang}&page=${page}&include_adult=false`)
 
       resolve(data.results.map(item => {
+        let releaseDate = item.release_date || item.first_air_date
+
         return {
           id: item.id,
           title: item.name || item.title,
-          img: item.poster_path
+          img: item.poster_path,
+          year: releaseDate ? releaseDate.substr(0, 4) : ''
         }
       }))
     } catch (err) {
@@ -68,17 +71,23 @@ export const getSingleMedia = (mediaType, id) => {
       cast: cast.data.cast,
       videos: videos.data.results.filter(video => video.site === 'YouTube'),
       recommendations: recommendations.data.results.slice(0, 12).map(item => {
+        let releaseDate = item.release_date || item.first_air_date
+
         return {
           id: item.id,
           title: item.name || item.title,
-          img: item.poster_path
+          img: item.poster_path,
+          year: releaseDate ? releaseDate.substr(0, 4) : ''
         }
       }),
       similar: similar.data.results.slice(0, 12).map(item => {
+        let releaseDate = item.release_date || item.first_air_date
+
         return {
           id: item.id,
           title: item.name || item.title,
-          img: item.poster_path
+          img: item.poster_path,
+          year: releaseDate ? releaseDate.substr(0, 4) : ''
         }
       }),
       seasons: data.seasons

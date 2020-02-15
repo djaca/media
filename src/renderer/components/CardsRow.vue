@@ -19,6 +19,7 @@
 					:to="to(item)"
 					:image="item.img"
 					:text="item.title"
+					:year="item.year"
 				/>
 			</v-col>
 		</v-row>

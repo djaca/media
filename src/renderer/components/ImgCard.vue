@@ -23,15 +23,20 @@
 							v-if="text"
 						/>
 						
-						<v-btn
-							color="white"
-							:to="to"
-							small
-							text
-							icon
-						>
-							<v-icon dark>mdi-eye</v-icon>
-						</v-btn>
+						<div class="d-flex flex-row align-center">
+							<v-btn
+								color="white"
+								:class="year ? 'mr-2' : ''"
+								:to="to"
+								small
+								text
+								icon
+							>
+								<v-icon dark>mdi-eye</v-icon>
+							</v-btn>
+							
+							<span class="caption" v-if="year" v-text="year" />
+						</div>
 					</div>
 				</v-overlay>
 			</v-fade-transition>
@@ -50,6 +55,11 @@
       },
   
       text: {
+        type: String,
+        required: false
+      },
+  
+      year: {
         type: String,
         required: false
       },
