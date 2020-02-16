@@ -187,6 +187,8 @@
         })
   
         this.engine.on('idle', () => {
+          this.$store.commit('Snackbar/setSnack', 'Torrent downloaded successfully')
+
           this.stopDownloading()
         })
       },

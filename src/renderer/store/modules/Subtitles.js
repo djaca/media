@@ -52,6 +52,8 @@ const actions = {
         dispatch('remove', id)
           .then(() => {
             commit('ADD', { id, urlId, path })
+
+            commit('Snackbar/setSnack', 'Subtitle downloaded successfully', {root: true})
           })
 
         resolve()

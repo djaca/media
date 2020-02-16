@@ -1,12 +1,13 @@
 <template>
 	<div id="app">
 		<v-app id="inspire">
+			<snackbar />
 			
 			<sidebar/>
 			
 			<temp-sidebar/>
 			
-			<navbar />
+			<navbar/>
 			
 			<v-content class="mb-12">
 				<loader v-if="loading"/>
@@ -20,6 +21,7 @@
 </template>
 
 <script>
+  import Snackbar from '@/components/App/Snackbar'
   import Navbar from '@/components/App/Navbar'
   import Sidebar from '@/components/App/Sidebar'
   import TempSidebar from '@/components/App/TempSidebar'
@@ -30,7 +32,7 @@
   export default {
     name: 'App',
   
-    components: { Navbar, Sidebar, TempSidebar, Loader, TorrentDownloader },
+    components: { Snackbar, Navbar, Sidebar, TempSidebar, Loader, TorrentDownloader },
   
     computed: {
       ...mapState({
