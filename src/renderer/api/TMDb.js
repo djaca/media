@@ -11,13 +11,11 @@ export const getMediaItems = (mediaType, type, page) => {
       const { data } = await axios.get(`${mediaType}/${type}?api_key=${key}&language=${lang}&page=${page}&include_adult=false`)
 
       resolve(data.results.map(item => {
-        let releaseDate = item.release_date || item.first_air_date
-
         return {
           id: item.id,
           title: item.name || item.title,
           img: item.poster_path,
-          year: releaseDate ? releaseDate.substr(0, 4) : ''
+          year: (item.release_date || item.first_air_date).substr(0, 4)
         }
       }))
     } catch (err) {
@@ -32,13 +30,11 @@ export const search = query => {
       const { data } = await axios.get(`search/multi?query=${query}&api_key=${key}&language=${lang}&page=1&include_adult=false`)
 
       resolve(data.results.filter(item => item.media_type !== 'person').map(item => {
-        let releaseDate = item.release_date || item.first_air_date
-
         return {
           id: item.id,
           title: item.name || item.title,
           img: item.poster_path,
-          year: releaseDate ? releaseDate.substr(0, 4) : '',
+          year: (item.release_date || item.first_air_date).substr(0, 4),
           type: item.media_type
         }
       }))
@@ -67,27 +63,24 @@ export const getSingleMedia = (mediaType, id) => {
       genres: data.genres.map(genre => genre.name),
       status: data.status,
       releaseDate: data.release_date || data.first_air_date,
+      year: (data.release_date || data.first_air_date).substr(0, 4),
       overview: data.overview,
       cast: cast.data.cast,
       videos: videos.data.results.filter(video => video.site === 'YouTube'),
       recommendations: recommendations.data.results.slice(0, 12).map(item => {
-        let releaseDate = item.release_date || item.first_air_date
-
         return {
           id: item.id,
           title: item.name || item.title,
           img: item.poster_path,
-          year: releaseDate ? releaseDate.substr(0, 4) : ''
+          year: (item.release_date || item.first_air_date).substr(0, 4)
         }
       }),
       similar: similar.data.results.slice(0, 12).map(item => {
-        let releaseDate = item.release_date || item.first_air_date
-
         return {
           id: item.id,
           title: item.name || item.title,
           img: item.poster_path,
-          year: releaseDate ? releaseDate.substr(0, 4) : ''
+          year: (item.release_date || item.first_air_date).substr(0, 4)
         }
       }),
       seasons: data.seasons

@@ -63,7 +63,8 @@ const actions = {
     const media = {
       id,
       title: currentMedia.title,
-      img: currentMedia.img
+      img: currentMedia.img,
+      year: currentMedia.year
     }
 
     commit('SET_MEDIA', { media, mediaType })
