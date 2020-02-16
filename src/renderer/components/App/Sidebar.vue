@@ -3,6 +3,7 @@
 		v-model="sidebar"
 		temporary
 		app
+		class="d-flex flex-column justify-space-between"
 	>
 		<v-list dense>
 			<v-list-item
@@ -29,6 +30,20 @@
 				</v-list-item>
 			</template>
 		</v-list>
+		
+		<template v-slot:append>
+			<v-list dense>
+				<v-list-item
+					@click.stop="showSettings"
+					exact
+					link
+				>
+					<v-list-item-content>
+						<v-list-item-title v-text="'Settings'"/>
+					</v-list-item-content>
+				</v-list-item>
+			</v-list>
+		</template>
 	</v-navigation-drawer>
 </template>
 
@@ -59,6 +74,14 @@
         get () {
           return this.$store.state.App.sidebar
         }
+      }
+    },
+  
+    methods: {
+      showSettings () {
+        this.sidebar = false
+  
+        this.$store.commit('App/SET_SETTINGS', true)
       }
     }
   }

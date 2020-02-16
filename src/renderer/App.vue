@@ -1,7 +1,7 @@
 <template>
 	<div id="app">
 		<v-app id="inspire">
-			<snackbar />
+			<snackbar/>
 			
 			<sidebar/>
 			
@@ -16,6 +16,8 @@
 			</v-content>
 			
 			<torrent-downloader/>
+			
+			<settings/>
 		</v-app>
 	</div>
 </template>
@@ -27,17 +29,22 @@
   import TempSidebar from '@/components/App/TempSidebar'
   import Loader from '@/components/App/Loader'
   import TorrentDownloader from './components/TorrentDownloader'
+  import Settings from '@/components/App/Settings'
   import { mapState } from 'vuex'
   
   export default {
     name: 'App',
   
-    components: { Snackbar, Navbar, Sidebar, TempSidebar, Loader, TorrentDownloader },
+    components: { Snackbar, Navbar, Sidebar, TempSidebar, Loader, TorrentDownloader, Settings },
   
     computed: {
       ...mapState({
         loading: state => state.Loader.show
       })
+    },
+  
+    beforeMount () {
+      this.$vuetify.theme.dark = this.$store.state.Settings.isDark
     }
   }
 </script>

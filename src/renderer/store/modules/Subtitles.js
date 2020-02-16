@@ -44,9 +44,9 @@ const actions = {
     })
   },
 
-  download ({ commit, dispatch, rootState }, {id, urlId}) {
+  download ({ commit, dispatch, getters, rootGetters }, {id, urlId}) {
     return new Promise(resolve => {
-      ipcRenderer.send('download-subtitle', { id: urlId })
+      ipcRenderer.send('download-subtitle', { path: rootGetters['Settings/subtitlesPath'], id: urlId })
 
       ipcRenderer.once('subtitle-downloaded', (event, { path }) => {
         dispatch('remove', id)

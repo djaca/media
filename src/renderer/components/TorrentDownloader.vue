@@ -73,10 +73,9 @@
 </template>
 
 <script>
-  import { mapState, mapMutations } from 'vuex'
+  import { mapState, mapMutations, mapGetters } from 'vuex'
   import torrentStream from 'torrent-stream'
   import prettyBytes from 'pretty-bytes'
-  import { torrentsDownloadDir } from '@/config'
   
   export default {
     name: 'TorrentDownloader',
@@ -99,6 +98,10 @@
         show: state => state.App.torrentDownloader,
         current: state => state.Torrents.current,
         media: state => state.Media.current
+      }),
+  
+      ...mapGetters({
+        folderPath: 'Settings/folderPath'
       }),
   
       isMovie () {
@@ -160,12 +163,12 @@
   
         this.title = this.media.title
   
-        this.engine = torrentStream(this.current.magnet, { path: torrentsDownloadDir })
+        this.engine = torrentStream(this.current.magnet, { path: this.folderPath })
   
         this.engine.on('ready', () => {
           const file = this.engine.files.sort((a, b) => b.length - a.length)[0]
   
-          this.$store.commit('Torrents/ADD_FILE_PATH', `${torrentsDownloadDir}/${file.path}`)
+          this.$store.commit('Torrents/ADD_FILE_PATH', `${this.folderPath}/${file.path}`)
   
           file.createReadStream()
   

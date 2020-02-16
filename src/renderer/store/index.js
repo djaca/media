@@ -6,7 +6,7 @@ import modules from './modules'
 
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
-  reducer: (state) => ({Favorites: state.Favorites})
+  reducer: (state) => ({Favorites: state.Favorites, Settings: state.Settings})
 })
 
 Vue.use(Vuex)

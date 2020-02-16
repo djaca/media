@@ -15,7 +15,6 @@
 						:text="exists"
 						class="mt-5"
 						block
-						dark
 					>
 						<span v-text="favoritesBtn"/>
 					</v-btn>
@@ -24,7 +23,6 @@
 						@click.stop="videosDialog = true"
 						class="mt-5"
 						block
-						dark
 					>
 						Trailer
 					</v-btn>
@@ -35,7 +33,6 @@
 						v-if="isMovie"
 						class="mt-5"
 						block
-						dark
 					>
 						Torrents
 					</v-btn>
@@ -45,7 +42,6 @@
 						@click="playMovie"
 						class="mt-5"
 						block
-						dark
 					>
 						Play
 					</v-btn>

@@ -32,7 +32,7 @@
 								text
 								icon
 							>
-								<v-icon dark>mdi-eye</v-icon>
+								<v-icon>mdi-eye</v-icon>
 							</v-btn>
 							
 							<span class="caption" v-if="year" v-text="year" />

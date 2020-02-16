@@ -2,6 +2,7 @@ const state = {
   title: '',
   sidebar: false,
   tempSidebar: false,
+  settings: false,
   torrentDownloader: false,
   currentMedia: 'movie', // or tv
   mediaIcon: {
@@ -65,6 +66,10 @@ const mutations = {
 
   SET_TEMP_SIDEBAR (state, val) {
     state.tempSidebar = val
+  },
+
+  SET_SETTINGS (state, payload) {
+    state.settings = payload
   },
 
   SET_SHOW_TORRENT (state, payload) {

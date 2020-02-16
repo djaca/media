@@ -7,11 +7,10 @@
 		fullscreen
 	>
 		<v-card v-if="torrentProviders">
-			<v-toolbar dark>
+			<v-toolbar>
 				<v-btn
 					@click="$emit('show', false)"
 					icon
-					dark
 				>
 					<v-icon>mdi-close</v-icon>
 				</v-btn>
@@ -24,7 +23,6 @@
 			<v-tabs
 				v-model="tab"
 				fixed-tabs
-				dark
 			>
 				<v-tab href="#tab-1">
 					Torrents
