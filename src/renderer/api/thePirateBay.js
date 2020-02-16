@@ -10,35 +10,22 @@ const remote = request.defaults({
   }
 })
 
-// 1337x.to base URL
-let tpbURL = 'https://thepiratebay.org'
-
-export function generateUrl (keyword) {
-  return tpbURL + '/search/' + keyword + '/0/99/0'
-}
-
 export function searchTorrents (keyword) {
-  return remote.get(tpbURL + '/search/' + keyword + '/0/99/0')
-    .then(resp => {
-      return cheerio.load(resp)
-    })
-    .then($ => {
-      return $('table#searchResult tr:has(a.detLink)')
-        .map((i, x) => {
-          let title = $(x).find('a.detLink').text()
+  return remote.get(`https://thepiratebay.org/search/${keyword}/0/99/0`)
+    .then(resp => cheerio.load(resp))
+    .then($ => $('table#searchResult tr:has(a.detLink)')
+      .map((i, x) => {
+        let title = $(x).find('a.detLink').text()
 
-          return {
-            seeders: $(x).find('td[align="right"]').first().text(),
-            leechers: $(x).find('td[align="right"]').next().text(),
-            title,
-            url: $(x).find('[title="Download this torrent using magnet"]').attr('href'),
-            size: $(x).find('font.detDesc').text().split(',')[1].split(' ')[2],
-            category: $(x).find('[title="More from this category"]').text(),
-            meta: ptn(title)
-          }
-        })
-        .filter((i, { category }) => /video|TV shows/gi.test(category))
-        .get()
-        .slice(0, 10)
-    })
+        return {
+          seeders: $(x).find('td[align="right"]').first().text(),
+          leechers: $(x).find('td[align="right"]').next().text(),
+          title,
+          url: $(x).find('[title="Download this torrent using magnet"]').attr('href'),
+          size: $(x).find('font.detDesc').text().split(',')[1].split(' ')[2],
+          meta: ptn(title)
+        }
+      })
+      .get()
+      .slice(0, 10))
 }

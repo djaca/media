@@ -3,7 +3,8 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import { download } from 'electron-dl'
 import fs from 'fs'
-import { downloadLink } from './../renderer/api/titlovi'
+import { downloadLink } from '@/api/titlovi'
+import { subtitlesDownloadDir } from '@/config'
 
 /**
  * Set `__static` path to static files in production
@@ -52,15 +53,13 @@ app.on('activate', () => {
   }
 })
 
-let subtitlesDir = `${app.getPath('downloads')}/TVShows/subtitles`
-
 ipcMain.on('download-subtitle', async (e, { id }) => {
   await downloadSubtitle(id)
 })
 
 async function downloadSubtitle (id) {
   let options = {
-    directory: subtitlesDir,
+    directory: subtitlesDownloadDir,
     onStarted: item => handlesSubtitleExists(item)
   }
 
@@ -74,13 +73,13 @@ async function downloadSubtitle (id) {
 }
 
 function handlesSubtitleExists (item) {
-  fs.readdir(subtitlesDir, (err, files) => {
+  fs.readdir(subtitlesDownloadDir, (err, files) => {
     if (!err && files.includes(item.getFilename())) {
       item.cancel()
 
       mainWindow.webContents.send(
         'subtitle-downloaded',
-        { path: `${subtitlesDir}/${item.getFilename()}` }
+        { path: `${subtitlesDownloadDir}/${item.getFilename()}` }
       )
     }
   })
