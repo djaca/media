@@ -8,9 +8,7 @@
 				>
 					{{ item.title }}
 					
-					<v-icon right>
-						mdi-numeric-{{ item.items.length }}-circle-outline
-					</v-icon>
+					<span class="caption ml-3">{{ item.items.length }}</span>
 				</v-tab>
 				
 				<v-tab-item
