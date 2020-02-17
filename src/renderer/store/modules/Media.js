@@ -89,9 +89,7 @@ const actions = {
     try {
       commit('Loader/toggle', null, { root: true })
 
-      const data = await getMediaItems(rootState.route.meta.type, rootState.App.type.name, state.page)
-
-      commit('ADD_ITEMS', data)
+      commit('ADD_ITEMS', await getMediaItems(rootState.route.meta.type, rootState.App.type.name, state.page))
 
       commit('INCREMENT_PAGE')
 
@@ -201,48 +199,50 @@ const actions = {
     })
   },
 
-  getTorrents ({ state, commit, rootState }) {
+  async getTorrents ({ state, commit, rootState }) {
     commit('RESET_TORRENTS')
 
-    getTorrentsFor(rootState.route.meta.type, state.current.imdbId)
-      .then(({ data }) => {
-        if (data) {
-          let torrents = {}
+    try {
+      const { data } = await getTorrentsFor(rootState.route.meta.type, state.current.imdbId)
 
-          if (rootState.route.meta.type === 'tv') {
-            data.episodes
-              .map(({ season, episode, torrents }) => ({ season, episode, torrents }))
-              .forEach(torrent => {
-                if (torrents.hasOwnProperty(torrent.season)) {
-                  torrents[torrent.season][torrent.episode] = torrent
-                } else {
-                  torrents[torrent.season] = {}
-                  torrents[torrent.season][torrent.episode] = torrent
-                }
-              })
-          } else {
-            torrents = data.torrents.en
-          }
+      if (data) {
+        let torrents = {}
 
-          commit('SET_TORRENTS', torrents)
+        if (rootState.route.meta.type === 'tv') {
+          data.episodes
+            .map(({ season, episode, torrents }) => ({ season, episode, torrents }))
+            .forEach(torrent => {
+              if (torrents.hasOwnProperty(torrent.season)) {
+                torrents[torrent.season][torrent.episode] = torrent
+              } else {
+                torrents[torrent.season] = {}
+                torrents[torrent.season][torrent.episode] = torrent
+              }
+            })
+        } else {
+          torrents = data.torrents.en
         }
-      })
-      .catch(err => console.log(err))
+
+        commit('SET_TORRENTS', torrents)
+      }
+    } catch (err) {
+      console.log(err)
+    }
   },
 
   searchTorrents ({ commit }, query) {
-    return new Promise((resolve, reject) => {
-      searchTorrents(query)
-        .then(data => {
-          commit('SET_TORRENTS', data)
+    return new Promise(async (resolve, reject) => {
+      try {
+        const data = await searchTorrents(query)
 
-          resolve(data)
-        })
-        .catch(err => {
-          console.log(err)
+        commit('SET_TORRENTS', data)
 
-          reject(err)
-        })
+        resolve(data)
+      } catch (err) {
+        console.log(err)
+
+        reject(err)
+      }
     })
   },
 

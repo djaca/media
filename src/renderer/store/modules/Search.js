@@ -11,12 +11,12 @@ const mutations = {
 }
 
 const actions = {
-  search ({ commit, rootState }, query) {
-    search(rootState.App.currentMedia, query)
-      .then(data => {
-        commit('SET_ITEMS', data)
-      })
-      .catch(err => console.log(err))
+  async search ({ commit, rootState }, query) {
+    try {
+      commit('SET_ITEMS', search(rootState.App.currentMedia, query))
+    } catch (err) {
+      console.log(err)
+    }
   }
 }
 

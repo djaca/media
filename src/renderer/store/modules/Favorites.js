@@ -1,6 +1,6 @@
 const state = {
   items: {
-    movie: [], // id, backdrop_path, title
+    movie: [],
     tv: []
   },
   watch: []

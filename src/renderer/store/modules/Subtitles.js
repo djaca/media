@@ -1,17 +1,4 @@
 import { ipcRenderer } from 'electron'
-/*
-
-movie: {
-  id,
-  path,
-}
-
-show: {
-  id,
-  path,
-  episodeId
-}
- */
 
 const state = {
   items: []
