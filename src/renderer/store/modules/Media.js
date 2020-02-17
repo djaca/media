@@ -1,6 +1,5 @@
 import { getMediaItems, getSingleMedia, getSeason } from '@/api/TMDb'
 import { getTorrentsFor } from '@/api/tvApi'
-import { searchTorrents } from '@/api/thePirateBay'
 import { searchTitlovi } from '@/api/titlovi'
 import router from '@/router'
 
@@ -228,22 +227,6 @@ const actions = {
     } catch (err) {
       console.log(err)
     }
-  },
-
-  searchTorrents ({ commit }, query) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const data = await searchTorrents(query)
-
-        commit('SET_TORRENTS', data)
-
-        resolve(data)
-      } catch (err) {
-        console.log(err)
-
-        reject(err)
-      }
-    })
   },
 
   async getSubtitles ({ commit, state, rootState }) {

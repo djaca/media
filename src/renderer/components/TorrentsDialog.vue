@@ -152,6 +152,7 @@
 
 <script>
   import { mapState, mapGetters, mapActions } from 'vuex'
+  import { searchTorrents } from '@/api/thePirateBay'
   
   export default {
     name: 'TorrentsDialog',
@@ -240,7 +241,7 @@
           : `${this.mediaTitle}`
   
         try {
-          let items = await this.searchTorrents(query)
+          let items = await searchTorrents(query)
   
           if (items.length > 0) {
             this.torrentProviders.tpb = items.filter(item => item.meta.resolution || item.meta.quality || item.meta.group)
