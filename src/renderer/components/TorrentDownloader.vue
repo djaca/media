@@ -188,15 +188,19 @@
   
         this.engine.on('idle', () => {
           this.$store.commit('Snackbar/setSnack', 'Torrent downloaded successfully')
+  
+          this.showDownloader(false)
 
-          this.stopDownloading()
+          this.clear()
         })
       },
   
       stopDownloading () {
-        this.clear()
-  
         this.showDownloader(false)
+  
+        this.$store.commit('Torrents/REMOVE_ITEM', this.current.id)
+  
+        this.clear()
       },
   
       clear () {
