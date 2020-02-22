@@ -12,7 +12,7 @@ const mutations = {
     state.items.push(payload)
   },
 
-  REMOVE_ITEM (state, {id, season, episode}) {
+  REMOVE_ITEM (state, { id, season, episode }) {
     if (!episode) {
       state.items.splice(state.items.findIndex(i => i.id === id), 1)
 
@@ -36,8 +36,8 @@ const mutations = {
 }
 
 const actions = {
-  download ({commit, rootState}, {id, magnet}) {
-    commit('SET_CURRENT', { id, magnet })
+  download ({ commit, rootState }, payload) {
+    commit('SET_CURRENT', payload)
   }
 }
 

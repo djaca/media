@@ -191,6 +191,10 @@
   
       subtitle () {
         return this.$store.getters['Subtitles/subtitle'](this.item.id)
+      },
+  
+      isMovie () {
+        return this.currentMedia !== 'tv'
       }
     },
   
@@ -207,7 +211,7 @@
   
       setPopcornTorrents () {
         if (this.torrents.popcorn) {
-          if (this.currentMedia === 'tv') {
+          if (!this.isMovie) {
             let torrents = this.torrents.popcorn[this.item.episode_number]
   
             if (torrents) {
@@ -236,12 +240,8 @@
       },
   
       async setTPBTorrents () {
-        let query = this.currentMedia === 'tv'
-          ? `${this.mediaTitle} S${this.season <= 9 ? `0${this.season}` : this.season}E${this.item.episode_number <= 9 ? `0${this.item.episode_number}` : this.item.episode_number}`
-          : `${this.mediaTitle}`
-  
         try {
-          let items = await searchTorrents(query)
+          let items = await searchTorrents(this.getQueryText())
   
           if (items.length > 0) {
             this.torrentProviders.tpb = items.filter(item => item.meta.resolution || item.meta.quality || item.meta.group)
@@ -253,11 +253,29 @@
         this.fetchingTPB = false
       },
   
+      getQueryText () {
+        let query = this.mediaTitle
+  
+        if (!this.isMovie) {
+          query += ` S${this.season <= 9 ? `0${this.season}` : this.season}E${this.item.episode_number <= 9 ? `0${this.item.episode_number}` : this.item.episode_number}`
+        }
+  
+        return query
+      },
+  
       downloadTorrent (magnet) {
         this.$emit('show', false)
   
+        let data = { id: this.item.id, magnet }
+  
+        if (this.currentMedia === 'tv') {
+          data.season = this.item.season_number
+  
+          data.episode = this.item.episode_number
+        }
+  
         this.$nextTick(() => {
-          this.$store.dispatch('Torrents/download', { id: this.item.id, magnet })
+          this.$store.dispatch('Torrents/download', data)
         })
       },
   
