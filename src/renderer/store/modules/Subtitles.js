@@ -32,23 +32,15 @@ const actions = {
   },
 
   download ({ commit, dispatch, getters, rootGetters }, {id, urlId}) {
-    return new Promise(resolve => {
-      ipcRenderer.send('download-subtitle', { path: rootGetters['Settings/subtitlesPath'], id: urlId })
+    ipcRenderer.send('download-subtitle', { path: rootGetters['Settings/subtitlesPath'], id: urlId })
 
-      ipcRenderer.once('subtitle-downloaded', (event, { path }) => {
-        dispatch('remove', id)
-          .then(() => {
-            commit('ADD', { id, urlId, path })
+    ipcRenderer.once('subtitle-downloaded', (event, { path }) => {
+      dispatch('remove', id)
+        .then(() => {
+          commit('ADD', { id, urlId, path })
 
-            commit('Snackbar/setSnack', 'Subtitle downloaded successfully', {root: true})
-          })
-
-        resolve()
-      })
-
-      ipcRenderer.on('download-subtitle-error', (event, err) => {
-        console.log(err)
-      })
+          commit('Snackbar/setSnack', 'Subtitle downloaded successfully', {root: true})
+        })
     })
   }
 }

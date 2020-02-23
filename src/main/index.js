@@ -64,7 +64,8 @@ ipcMain.on('download-subtitle', async (e, { path, id }) => {
 async function downloadSubtitle (id) {
   let options = {
     directory: dir,
-    onStarted: item => handlesSubtitleExists(item)
+    onStarted: item => handlesSubtitleExists(item),
+    errorMessage: 'Something went wrong downloading file'
   }
 
   try {
