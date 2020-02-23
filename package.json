@@ -28,6 +28,7 @@
     "cheerio": "^1.0.0-rc.3",
     "core-js": "^3.4.4",
     "electron-dl": "^3.0.0",
+    "electron-store": "^5.1.1",
     "fs": "^0.0.1-security",
     "lodash": "^4.17.15",
     "parse-torrent-name": "^0.5.4",
@@ -42,7 +43,7 @@
     "vue-youtube": "^1.4.0",
     "vuetify": "^2.2.8",
     "vuex": "^3.1.2",
-    "vuex-persist": "^2.2.0",
+    "vuex-persistedstate": "^2.7.1",
     "vuex-router-sync": "^5.0.0"
   },
   "devDependencies": {
