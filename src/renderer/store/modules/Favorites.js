@@ -13,7 +13,7 @@ const getters = {
 
   shows: state => state.items.tv,
 
-  isWatched: (state, getters, rootState) => episode => {
+  isTVShowWatched: (state, getters, rootState) => episode => {
     let show = state.watch.find(s => s.id === rootState.route.params.id && s.season === rootState.route.params.season)
 
     return show ? show.episodes.includes(episode) : false

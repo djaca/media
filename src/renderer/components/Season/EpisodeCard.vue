@@ -91,7 +91,7 @@
   
     computed: {
       ...mapGetters({
-        watched: 'Favorites/isWatched',
+        watched: 'Favorites/isTVShowWatched',
         torrents: 'Media/torrents'
       }),
   
