@@ -1,6 +1,7 @@
 const state = {
   items: [],
-  current: null
+  current: null,
+  isDownloading: false
 }
 
 const getters = {
@@ -30,14 +31,26 @@ const mutations = {
     state.current.path = payload
   },
 
-  close (state) {
-    state.show = false
+  SET_IS_DOWNLOADING (state, payload) {
+    state.isDownloading = payload
   }
 }
 
 const actions = {
-  download ({ commit, rootState }, payload) {
-    commit('SET_CURRENT', payload)
+  download ({ commit, state, rootState }, payload) {
+    if (state.isDownloading) {
+      commit('Torrents/REMOVE_ITEM', rootState.Torrents.current.id, { root: true })
+
+      commit('SET_CURRENT', null)
+
+      commit('SET_IS_DOWNLOADING', false)
+    }
+
+    setTimeout(() => {
+      commit('SET_CURRENT', payload)
+
+      commit('SET_IS_DOWNLOADING', true)
+    }, 300)
   }
 }
 

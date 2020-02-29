@@ -1,12 +1,16 @@
 <template>
 	<div
-		role="document"
 		class="v-dialog__content v-dialog__content--active"
 		style="z-index:202;"
+		role="document"
 		tabindex="-1"
 	>
 		<transition name="bottom-sheet-transition">
-			<div class="v-dialog v-dialog--active v-dialog--persistent v-bottom-sheet v-bottom-sheet--inset" style="max-width:70%;margin-bottom:0" v-if="show">
+			<div
+				class="v-dialog v-dialog--active v-dialog--persistent v-bottom-sheet v-bottom-sheet--inset"
+				style="max-width:70%;margin-bottom:0"
+				v-if="show"
+			>
 				<v-card tile>
 					<v-progress-linear
 						v-if="!fetchingMetadata"
@@ -47,20 +51,25 @@
 								</v-list-item-content>
 								
 								<v-spacer/>
-								
-								<v-list-item-icon>
-									<v-btn
-										@click="play"
-										x-large
-										icon
-									>
-										<v-icon>mdi-play</v-icon>
-									</v-btn>
-								</v-list-item-icon>
 							</template>
 							
 							<v-list-item-icon>
-								<v-btn icon x-large @click="stopDownloading">
+								<v-btn
+									v-if="remaining > 5"
+									@click="play"
+									x-large
+									icon
+								>
+									<v-icon>mdi-play</v-icon>
+								</v-btn>
+							</v-list-item-icon>
+							
+							<v-list-item-icon>
+								<v-btn
+									@click="stopDownloading"
+									x-large
+									icon
+								>
 									<v-icon>mdi-stop</v-icon>
 								</v-btn>
 							</v-list-item-icon>
@@ -118,10 +127,6 @@
         }
   
         return null
-      },
-  
-      isDownloading () {
-        return !!this.current
       },
   
       downloadingSpeed () {
@@ -200,6 +205,10 @@
   
         this.$store.commit('Torrents/REMOVE_ITEM', this.current.id)
   
+        this.$store.commit('Torrents/SET_IS_DOWNLOADING', false)
+  
+        this.$store.commit('Torrents/SET_CURRENT', null)
+  
         this.clear()
       },
   
@@ -225,8 +234,6 @@
         this.title = null
   
         this.img = null
-
-        this.$store.commit('Torrents/SET_CURRENT', null)
       },
   
       play () {
@@ -238,12 +245,14 @@
       }
     },
   
-    watch: {
-      isDownloading (val) {
-        if (val) {
-          this.startDownloading()
+    mounted () {
+      this.$store.watch(state => state.Torrents.isDownloading, () => {
+        if (this.$store.state.Torrents.isDownloading) {
+          return this.startDownloading()
         }
-      }
+
+        this.clear()
+      })
     }
   }
 </script>
