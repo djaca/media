@@ -6,7 +6,26 @@
 		right
 	>
 		<v-list dense>
-			<template v-for="(type, i) in types">
+			<template v-if="$route.name === 'home'">
+				<v-subheader>Sort</v-subheader>
+
+				<v-list-item
+					:input-value="rule.by === $store.state.App.sortRule.by"
+					v-for="(rule, i) in sortRules"
+					@click="doSort(rule)"
+					:key="i"
+				>
+					<v-list-item-content>
+						<v-list-item-title v-text="rule.text"/>
+					</v-list-item-content>
+					
+					<v-list-item-icon v-if="rule.by === $store.state.App.sortRule.by">
+						<v-icon>mdi-sort-{{ $store.state.App.sortRule.order === 'asc' ? 'ascending' : 'descending' }}</v-icon>
+					</v-list-item-icon>
+				</v-list-item>
+			</template>
+			
+			<template v-else v-for="(type, i) in types">
 				<v-list-item
 					:input-value="isActive(type.name)"
 					@click.stop="to(type)"
@@ -30,9 +49,10 @@
     computed: {
       ...mapState({
         current: state => state.App.type,
-        tempSidebar: state => state.App.tempSidebar
+        tempSidebar: state => state.App.tempSidebar,
+        sortRules: state => state.App.sortRules
       }),
-
+  
       ...mapGetters({
         types: 'App/types'
       }),
@@ -64,6 +84,10 @@
           .then(() => {
             this.fetch()
           })
+      },
+  
+      doSort (rule) {
+        this.$store.dispatch('App/doSort', rule)
       },
   
       isActive (name) {

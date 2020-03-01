@@ -12,7 +12,22 @@ const getters = {
     let show = state.watch.find(s => s.id === rootState.route.params.id && s.season === rootState.route.params.season)
 
     return show ? show.episodes.includes(episode) : false
-  }
+  },
+
+  title: state => order =>
+    order === 'asc'
+      ? [...state.items].sort((a, b) => a.title.localeCompare(b.title))
+      : [...state.items].sort((a, b) => b.title.localeCompare(a.title)),
+
+  added: state => order =>
+    order === 'asc'
+      ? [...state.items].sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded))
+      : [...state.items].sort((a, b) => new Date(a.dateAdded) - new Date(b.dateAdded)),
+
+  lastAirDate: state => order =>
+    order === 'asc'
+      ? [...state.items].sort((a, b) => new Date(b.lastAirDate) - new Date(a.lastAirDate))
+      : [...state.items].sort((a, b) => new Date(a.lastAirDate) - new Date(b.lastAirDate))
 }
 
 const mutations = {
@@ -57,7 +72,9 @@ const actions = {
       id,
       title: currentMedia.title,
       img: currentMedia.img,
-      year: currentMedia.year
+      year: currentMedia.year,
+      dateAdded: new Date(),
+      lastAirDate: currentMedia.lastAirDate
     }
 
     commit('SET_MEDIA', media)

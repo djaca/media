@@ -1,13 +1,13 @@
 <template>
 	<v-row justify="center">
 		<v-container fluid>
-			<cards-row :items="shows"/>
+			<cards-row :items="items"/>
 		</v-container>
 	</v-row>
 </template>
 
 <script>
-  import { mapGetters, mapMutations } from 'vuex'
+  import { mapMutations } from 'vuex'
   import CardsRow from '../components/CardsRow'
   
   export default {
@@ -16,9 +16,9 @@
     components: { CardsRow },
   
     computed: {
-      ...mapGetters({
-        shows: 'Favorites/shows'
-      })
+      items () {
+        return this.$store.getters[`Favorites/${this.$store.state.App.sortRule.by}`](this.$store.state.App.sortRule.order)
+      }
     },
   
     methods: {

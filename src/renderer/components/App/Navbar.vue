@@ -38,7 +38,7 @@
 		</template>
 		
 		<v-app-bar-nav-icon
-			v-if="$route.name === 'movies' || $route.name === 'tv-shows'"
+			v-if="$route.name === 'movies' || $route.name === 'tv-shows' || $route.name === 'home'"
 			@click.stop="toggleTempSidebar"
 		/>
 	</v-app-bar>

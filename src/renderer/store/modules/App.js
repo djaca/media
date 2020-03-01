@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 const state = {
   title: '',
   sidebar: false,
@@ -42,6 +44,26 @@ const state = {
   type: {
     text: 'Popular',
     name: 'popular'
+  },
+  sortRules: [
+    {
+      text: 'Title',
+      by: 'title'
+    },
+    {
+      text: 'Date added',
+      by: 'added'
+    },
+    {
+      text: 'Last Air Date',
+      by: 'lastAirDate'
+    }
+  ],
+  sortOrders: ['asc', 'desc'],
+  sortRule: {
+    text: 'Title',
+    by: 'title',
+    order: 'asc'
   }
 }
 
@@ -93,6 +115,14 @@ const mutations = {
       text: 'Popular',
       name: 'popular'
     }
+  },
+
+  SET_SORT_RULE (state, index) {
+    state.sortRule = state.sortRules[index]
+  },
+
+  SET_SORT_ORDER (state, order) {
+    Vue.set(state.sortRule, 'order', state.sortOrders[order])
   }
 }
 
@@ -107,6 +137,16 @@ const actions = {
 
       resolve()
     })
+  },
+
+  doSort ({ commit, state, rootState }, { by }) {
+    if (by === rootState.App.sortRule.by) {
+      commit('SET_SORT_ORDER', state.sortRule.order === state.sortOrders[0] ? 1 : 0)
+
+      return
+    }
+
+    commit('SET_SORT_RULE', state.sortRules.findIndex(r => r.by === by))
   }
 }
 

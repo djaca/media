@@ -59,7 +59,8 @@ export const getSingleMedia = (mediaType, id) => {
       videos: videos.data.results.filter(video => video.site === 'YouTube'),
       recommendations: recommendations.data.results.slice(0, 12).map(item => parseResults(item)),
       similar: similar.data.results.slice(0, 12).map(item => parseResults(item)),
-      seasons: data.seasons ? data.seasons.map(item => parseSeasons(item)) : null
+      seasons: data.seasons ? data.seasons.map(item => parseSeasons(item)) : null,
+      lastAirDate: data.last_air_date
     }
   }))
 }
