@@ -4,9 +4,10 @@ const state = {
 }
 
 const getters = {
-  exists: (state, getters, rootState) => state.items.some(i => i.id === rootState.Media.current.id),
-
-  shows: state => state.items,
+  exists: (state, getters, rootState) =>
+    rootState.Media.current
+      ? state.items.some(i => i.id === rootState.Media.current.id)
+      : false,
 
   isWatched: (state, getters, rootState) => episode => {
     let show = state.watch.find(s => s.id === rootState.route.params.id && s.season === rootState.route.params.season)
