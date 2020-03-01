@@ -1,10 +1,19 @@
 const state = {
-  snack: ''
+  snack: '',
+  color: 'success'
 }
 
 const mutations = {
-  setSnack (state, snack) {
-    state.snack = snack
+  setSnack (state, payload) {
+    if (typeof payload === 'string') {
+      state.snack = payload
+
+      return
+    }
+
+    state.snack = payload.snack
+
+    state.color = payload.color
   }
 }
 

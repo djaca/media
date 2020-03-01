@@ -1,10 +1,11 @@
 <template>
 	<v-snackbar
-		v-model="show"
-		top
 		:timeout="3000"
+		v-model="show"
+		:color="color"
+		top
 	>
-		{{message}}
+		{{ message }}
 	</v-snackbar>
 </template>
 
@@ -15,7 +16,8 @@
     data () {
       return {
         show: false,
-        message: ''
+        message: '',
+        color: ''
       }
     },
   
@@ -26,9 +28,11 @@
         if (msg !== '') {
           this.show = true
   
-          this.message = this.$store.state.Snackbar.snack
+          this.message = msg
   
-          this.$store.commit('Snackbar/setSnack', '')
+          this.color = this.$store.state.Snackbar.color
+  
+          this.$store.commit('Snackbar/setSnack', { snack: '', color: 'success' })
         }
       })
     }

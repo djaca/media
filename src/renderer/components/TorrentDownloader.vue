@@ -209,6 +209,8 @@
   
         this.$store.commit('Torrents/SET_CURRENT', null)
   
+        this.$store.commit('Snackbar/setSnack', {snack: 'Torrent download stopped', color: ''})
+  
         this.clear()
       },
   
