@@ -1,19 +1,14 @@
 const state = {
-  items: {
-    movie: [],
-    tv: []
-  },
+  items: [],
   watch: []
 }
 
 const getters = {
-  exists: (state, getters, rootState) => state.items[rootState.App.currentMedia].some(i => i.id === rootState.Media.current.id),
+  exists: (state, getters, rootState) => state.items.some(i => i.id === rootState.Media.current.id),
 
-  movies: state => state.items.movie,
+  shows: state => state.items,
 
-  shows: state => state.items.tv,
-
-  isTVShowWatched: (state, getters, rootState) => episode => {
+  isWatched: (state, getters, rootState) => episode => {
     let show = state.watch.find(s => s.id === rootState.route.params.id && s.season === rootState.route.params.season)
 
     return show ? show.episodes.includes(episode) : false
@@ -21,12 +16,12 @@ const getters = {
 }
 
 const mutations = {
-  SET_MEDIA (state, { media, mediaType }) {
-    state.items[mediaType].push(media)
+  SET_MEDIA (state, media) {
+    state.items.push(media)
   },
 
-  REMOVE_MEDIA (state, { id, mediaType }) {
-    state.items[mediaType].splice(state.items[mediaType].find(i => i.id === id), 1)
+  REMOVE_MEDIA (state, id) {
+    state.items.splice(state.items.findIndex(i => i.id === id), 1)
   },
 
   WATCH (state, { index, id, season, episode }) {
@@ -50,12 +45,10 @@ const actions = {
 
     let id = currentMedia.id
 
-    let mediaType = rootState.App.currentMedia
-
-    let exists = state.items[mediaType].some(i => i.id === id)
+    let exists = state.items.some(i => i.id === id)
 
     if (exists) {
-      commit('REMOVE_MEDIA', { id, mediaType })
+      commit('REMOVE_MEDIA', id)
 
       return
     }
@@ -67,7 +60,7 @@ const actions = {
       year: currentMedia.year
     }
 
-    commit('SET_MEDIA', { media, mediaType })
+    commit('SET_MEDIA', media)
   },
 
   toggleWatchUnwatch ({ commit, state, rootState }, episode) {

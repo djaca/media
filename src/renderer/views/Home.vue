@@ -1,26 +1,8 @@
 <template>
 	<v-row justify="center">
-		<v-tabs>
-			<template v-for="(item, i) in items">
-				<v-tab
-					@change="setMediaType(item.mediaType)"
-					:key="i"
-				>
-					{{ item.title }}
-					
-					<span class="caption ml-3">{{ item.items.length }}</span>
-				</v-tab>
-				
-				<v-tab-item
-					style="min-height: 270px"
-					:key="i"
-				>
-					<v-container fluid>
-						<cards-row :items="item.items"/>
-					</v-container>
-				</v-tab-item>
-			</template>
-		</v-tabs>
+		<v-container fluid>
+			<cards-row :items="shows"/>
+		</v-container>
 	</v-row>
 </template>
 
@@ -35,37 +17,21 @@
   
     computed: {
       ...mapGetters({
-        movies: 'Favorites/movies',
         shows: 'Favorites/shows'
-      }),
-  
-      items () {
-        return [
-          {
-            title: 'Movies',
-            items: this.movies,
-            mediaType: 'movie'
-          },
-          {
-            title: 'TV Shows',
-            items: this.shows,
-            mediaType: 'tv'
-          }
-        ]
-      }
+      })
     },
   
     methods: {
       ...mapMutations({
-        setMediaType: 'App/SET_MEDIA',
-        setTitle: 'App/SET_TITLE'
+        setTitle: 'App/SET_TITLE',
+        setMediaType: 'App/SET_MEDIA'
       })
     },
   
     mounted () {
-      this.setMediaType(this.items[0].mediaType)
-  
       this.setTitle('Favorites')
+  
+      this.setMediaType('tv')
     }
   }
 </script>

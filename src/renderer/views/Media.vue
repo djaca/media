@@ -12,6 +12,7 @@
 					
 					<v-btn
 						@click="toggleAddRemove"
+						v-if="!isMovie"
 						:text="exists"
 						class="mt-5"
 						block
