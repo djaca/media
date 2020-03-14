@@ -257,7 +257,7 @@
           this.$electron.shell.openItem(this.subtitle.path)
         }
 
-        this.$electron.shell.openItem(this.current.path)
+        this.$electron.shell.openItem(this.torrent.path)
       }
     },
   
